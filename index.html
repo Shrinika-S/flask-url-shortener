@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>URL Shortener</title>
+    <style>
+        body { font-family: Arial; text-align: center; padding: 50px; }
+        input { width: 300px; padding: 10px; }
+        button { padding: 10px 20px; }
+    </style>
+</head>
+<body>
+    <h1>URL Shortener</h1>
+    <form id="url-form">
+        <input type="text" id="long_url" placeholder="Enter long URL" required>
+        <button type="submit">Shorten</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        const form = document.getElementById('url-form');
+        const resultDiv = document.getElementById('result');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const longUrl = document.getElementById('long_url').value;
+
+            const res = await fetch('/shorten', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ long_url: longUrl })
+            });
+
+            const data = await res.json();
+            resultDiv.innerHTML = `<p>Short URL: <a href="${data.short_url}" target="_blank">${data.short_url}</a></p>`;
+        });
+    </script>
+</body>
+</html>
